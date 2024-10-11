@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desakuu</title>
+    <link rel="stylesheet" href="assets/leaflet.css">
+    <script src="assets/leaflet.js"></script>
+    <script src="art penujak.geojson.js"></script>
+    <script src="ln penunjak.geojson.js"></script>
+    <style>
+        body, html {
+            padding: 0px;
+            margin: 0px;
+            height: 100%;
+        }
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        // Inisialisasi peta dengan tampilan awal
+        const map = L.map('map').setView([-8.7111953,116.3446173], 13);
+
+        // Tambahkan layer OpenStreetMap
+        const openStreetMapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
+        
+
+        const googleSatlayer = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; <a href="https://maps.google.com">Google Maps</a>'
+        });
+
+      
+
+        // Membuat ikon kustom
+        var kantorIcon = L.icon({
+            iconUrl: 'assets/images/kantor.jpg',
+            iconSize: [32, 37],
+            iconAnchor: [16, 37],
+            popupAnchor: [0, -28]
+        });
+
+        var sekolahIcon = L.icon({
+            iconUrl: 'assets/images/sekolahh.jpg',
+            iconSize: [32, 37],
+            iconAnchor: [16, 37],
+            popupAnchor: [0, -28]
+        });
+
+        var ibadahIcon = L.icon({
+            iconUrl: 'assets/images/masjid.jpg',
+            iconSize: [32, 37],
+            iconAnchor: [16, 37],
+            popupAnchor: [0, -28]
+        });
+
+        // Membuat Layer Groups
+        var pemerintahanLayer = L.layerGroup();
+        var pendidikanLayer = L.layerGroup();
+        var ibadahLayer = L.layerGroup();
+
+        // Tambahkan marker dengan ikon ke masing-masing layer group
+        var kantor_desa_penujak = L.marker([-8.742825128739035, 116.2413667325754], { icon: kantorIcon }).bindPopup("Kantor desa penujak");
+        kantor_desa_penujak.addTo(pemerintahanLayer);
+
+        var SDN_1_Penujak = L.marker([-8.748633199201121, 116.23896989446695], { icon: sekolahIcon }).bindPopup("SDN 1 Penujak");
+        var SDN_2_Penujak = L.marker([-8.748177226606375, 116.24170574773581], { icon: sekolahIcon }).bindPopup("SDN 2 Penujak");
+        var SDN_1_Setanggor = L.marker([-8.757823982208357, 116.22316634768443], { icon: sekolahIcon }).bindPopup("SDN 1 Setanggor");
+        SDN_1_Penujak.addTo(pendidikanLayer);
+        SDN_2_Penujak.addTo(pendidikanLayer);
+        SDN_1_Setanggor.addTo(pendidikanLayer);
+
+        var masjid1 = L.marker([-8.736991413859082, 116.23727844800594], { icon: ibadahIcon }).bindPopup("Masjid ummul huda batu jai");
+        var masjid2 = L.marker([-8.750806869600032, 116.24360533844565], { icon: ibadahIcon }).bindPopup("Masjid toro");
+        var masjid3 = L.marker([-8.746584594967619, 116.2373113767647], { icon: ibadahIcon }).bindPopup("Masjid raudhatul jannah");
+        var masjid4 = L.marker([-8.777040876330053, 116.20650172430922], { icon: ibadahIcon }).bindPopup("masjid nurul imam kelebuh");
+        masjid1.addTo(ibadahLayer);
+        masjid2.addTo(ibadahLayer);
+        masjid3.addTo(ibadahLayer);
+        masjid4.addTo(ibadahLayer);
+
+        // Tambahkan kontrol layer untuk menampilkan/mematikan layer group
+        var baseLayers = {
+            "OpenStreetMap": openStreetMapLayer,
+            "Satelit": googleSatlayer
+        };
+
+        var overlayLayers = {
+            "Fasilitas Pemerintahan": pemerintahanLayer,
+            "Fasilitas Pendidikan": pendidikanLayer,
+            "Fasilitas Ibadah": ibadahLayer
+        };
+
+        L.control.layers(baseLayers, overlayLayers).addTo(map);
+
+        // Set layer awal yang ditampilkan
+       googleSatlayer.addTo(map);
+        pemerintahanLayer.addTo(map);
+        pendidikanLayer.addTo(map);
+        ibadahLayer.addTo(map);
+
+        // Tambahkan event untuk klik pada peta
+        function onMapClick(e) {
+            alert("You clicked the map at " + e.latlng);
+        }
+        map.on('click', onMapClick);
+    </script>
+</body>
+</html>
